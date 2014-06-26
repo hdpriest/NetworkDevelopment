@@ -60,6 +60,7 @@ public class NetworkCalculator {
 			System.err.println("No file found to read.\n");
 			System.exit(0);
 		}
+		
 		ArrayList<String> Loci = loadLoci(file);
 		System.err.println("Loading Data File\n");
 		ArrayList<ArrayList<Double>> DataFrame = loadData(file);
@@ -134,7 +135,6 @@ public class NetworkCalculator {
 				Row=DataFrame.get(i);
 				String row = StringUtils.join(Row,",");
 				writer.println(row+"\n");
-				//System.out.println(ArrayUtils.toString(Row)+"\n");
 			}
 			writer.close();
 		} catch (Exception e){
