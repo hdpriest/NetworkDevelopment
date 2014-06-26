@@ -15,8 +15,6 @@ import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 public class NetworkCalculator {
 
 	public static void main(String[] args) {
-		//// this is a test.
-		//// this is a second test.
 		CommandLineParser parser = new BasicParser();
 		Options options = buildOptions();
 		String pathIn = null;
