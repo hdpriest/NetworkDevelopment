@@ -60,10 +60,18 @@ public class NetworkCalculator {
 			System.err.println("No file found to read.\n");
 			System.exit(0);
 		}
+		int[] FileDimensions = new int [2]; 
+		FileDimensions = getFileDimensions(file);
 		
-		ArrayList<String> Loci = loadLoci(file);
+		String[] Loci = new String[FileDimensions[0]];
+		Loci = loadLoci(file,FileDimensions[0]);
+		
 		System.err.println("Loading Data File\n");
-		ArrayList<ArrayList<Double>> DataFrame = loadData(file);
+		
+		double[][] DataFrame = new double[FileDimensions[0]][FileDimensions[1]];
+		DataFrame = loadData(file);
+		/*
+		//ArrayList<ArrayList<Double>> DataFrame = loadData(file);
 		System.err.println("Calculating Similarity\n");
 		ArrayList<ArrayList<Double>> Similarity = calculateSimilarity(DataFrame);
 		System.err.println("Printing similarity to file...\n");
@@ -71,7 +79,8 @@ public class NetworkCalculator {
 		System.err.println("Calculating Adjacency...\n");
 		ArrayList<ArrayList<Double>> Adjacency = calculateSigmoidAdjacency(Similarity,0.8,15);
 		System.err.println("Printing Adjacency to file...\n");
-		printMatrixToFile(Adjacency,Loci,AdjOut);			
+		printMatrixToFile(Adjacency,Loci,AdjOut);
+		*/			
 	}
 	
 	private static Options buildOptions (){
@@ -182,15 +191,43 @@ public class NetworkCalculator {
 		return Similarity;
 	}
 	
-	private static ArrayList<String> loadLoci (File file) {
-		ArrayList<String> Loci = new ArrayList<String>();
-		try {
-			Scanner scanner = new Scanner(file);
+	private static int[2] getFileDimensions (String file) {
+	    try {
+	    	Scanner scanner = new Scanner(file);
 			String header[] = scanner.nextLine().split("\t");
+			int[] dimensions = new int[2];
+			dimensions[0]=0; // Frame height (minus header)
+			dimensions[1]=header.length() - 1;  // Frame width (minus rowID)
 			while(scanner.hasNextLine()){
 				String line=scanner.nextLine();
 				String[] Line = line.split("\t");
-				Loci.add(Line[0]);
+				int this_width = Line.length() - 1;
+				(this_width == dimensions[1]) ? fileDimErr (file) : ;
+				dimensions[0]+=1;
+			}
+	        return dimensions
+	    } catch (FileNotFoundException e){
+			e.printStackTrace();	    	
+	    } finally {
+	    }
+	}
+	
+	private static void fileDimErr (String file) {
+		System.err.println("File: " + file + " is not a square data file");
+		System.exit(0);
+	}
+	
+	private static String[] loadLoci (File file,int Dim) {
+		String[] Loci = new String[Dim];
+		try {
+			Scanner scanner = new Scanner(file);
+			String header[] = scanner.nextLine().split("\t");
+			int it=0;
+			while(scanner.hasNextLine()){
+				String line=scanner.nextLine();
+				String[] Line = line.split("\t");
+				Loci[it] = Line[0];
+				it++;
 			}
 			scanner.close();		
 		} catch (FileNotFoundException e){
@@ -199,24 +236,31 @@ public class NetworkCalculator {
 		return Loci;
 	}
 	
-	private static ArrayList<ArrayList<Double>> loadData (File file) {
-		ArrayList<ArrayList<Double>> DataFrame = new ArrayList<ArrayList<Double>>();
+//	private static ArrayList<ArrayList<Double>> loadData (File file) {
+	private static double[][] loadData (File file, Dims) {
+		double[][] DataFrame = new double[Dims[0]][Dims[1]];
+//		ArrayList<ArrayList<Double>> DataFrame = new ArrayList<ArrayList<Double>>();
 		try {
 			Scanner scanner = new Scanner(file);
 			String header[] = scanner.nextLine().split("\t");
+			int it=0;
 			while(scanner.hasNextLine()){
 				String line=scanner.nextLine();
 				String[] Line = line.split("\t");
-				ArrayList<Double> Data = new ArrayList<Double>();
+				double[] data = new double[Dims1];
+				//ArrayList<Double> Data = new ArrayList<Double>();
 				for(int i=1;i<Line.length;i++){
 					try {
-						double value = Double.parseDouble(Line[i]);
-						Data.add(value);
+						my I=i-1;
+						//double value = Double.parseDouble(Line[i]);
+						data[I]=value;
+						//Data.add(value);
 					}catch(NumberFormatException e){
 						e.printStackTrace();
 					}
 				}
-				DataFrame.add(Data);
+				DataFrame[it]=data;
+				//DataFrame.add(Data);
 			}
 			scanner.close();
 		} catch (FileNotFoundException e){
