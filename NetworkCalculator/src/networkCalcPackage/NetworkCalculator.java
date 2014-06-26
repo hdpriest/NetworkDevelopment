@@ -51,10 +51,7 @@ public class NetworkCalculator {
 			System.err.println("Exiting...\n");
 			System.exit(0);
 		}
-		//String pathIn="C:\\Users\\HPriest\\Documents\\Active Projects\\Java Development\\Zm.OrthoMCL.DF.t500.tab";
-		//String pathIn = args[0];
-		//String SimOut = args[1];
-		//String AdjOut = args[2];
+		
 		File file = null;
 		try{
 			file = new File(pathIn);
